@@ -5,6 +5,7 @@ public class InventoryGrid : MonoBehaviour
     [SerializeField] int gridWidth = 3;
     [SerializeField] int gridHeight = 3;
     [SerializeField] float cellSize;
+    [SerializeField] float cellSizeMultiplier = 0.01f;
     [SerializeField] GameObject slotPrefab;
     [SerializeField] SpriteRenderer gridSprite;
     float gridSpriteWidth, gridSpriteHeight, slotSpriteWidth, slotSpriteHeight;
@@ -29,6 +30,11 @@ public class InventoryGrid : MonoBehaviour
             for (int j = 0; j < gridHeight; j++)
             {
                 var newSlot = Instantiate(slotPrefab, transform);
+                SpriteRenderer newSlotRenderer = newSlot.GetComponent<SpriteRenderer>();
+                float slotWidth = newSlotRenderer.bounds.size.x;
+                float slotHeight = newSlotRenderer.bounds.size.y;
+                Debug.Log($"slot sprite sizes: {slotWidth},{slotHeight}");
+                newSlot.transform.localScale = new Vector3(cellSize * cellSizeMultiplier / slotSpriteWidth, cellSize * cellSizeMultiplier / slotSpriteHeight, 1f);
                 Vector2Int newCoord = new Vector2Int(i, j);
                 newSlot.transform.localPosition = GetLocalPositionFromCoord(newCoord);
                 newSlot.gameObject.name = $"Slot({i},{j})";
@@ -37,9 +43,9 @@ public class InventoryGrid : MonoBehaviour
     }
     Vector2 GetLocalPositionFromCoord(Vector2Int coord)
     {
-        float left = -gridSpriteWidth / 2 + slotSpriteWidth / 2;
-        float top = gridSpriteHeight / 2 - slotSpriteHeight / 2;
+        float left = -gridSpriteWidth / 2 + cellSize * cellSizeMultiplier / 2;
+        float top = gridSpriteHeight / 2 - cellSize * cellSizeMultiplier / 2;
 
-        return new Vector2(left  + coord.x * slotSpriteWidth, top - coord.y * slotSpriteHeight);
+        return new Vector2(left  + coord.x * cellSize * cellSizeMultiplier, top - coord.y * cellSize * cellSizeMultiplier);
     }
 }

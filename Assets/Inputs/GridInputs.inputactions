@@ -1,0 +1,52 @@
+{
+    "version": 1,
+    "name": "GridInputs",
+    "maps": [
+        {
+            "name": "Grid",
+            "id": "083320a6-eeba-45e9-a5d2-59919b142d25",
+            "actions": [
+                {
+                    "name": "SlotClick",
+                    "type": "Button",
+                    "id": "bad0f402-11af-4c2b-8dd9-4656c222bcd0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "87d8dcde-786f-4c3b-88e4-0205e123faca",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SlotClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard & Mouse",
+            "bindingGroup": "Keyboard & Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7017a5dae172d4aa1cfef57687b11e, type: 3}
+  m_Name: BigSwordData_2
+  m_EditorClassIdentifier: 
+  itemID: item_BigSword
+  shapeCoords:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  width: 1
+  height: 3
+  itemIcon: {fileID: 6381545932276173328, guid: ced42aa24f90be349ae0dcb2ec6da9d6, type: 3}

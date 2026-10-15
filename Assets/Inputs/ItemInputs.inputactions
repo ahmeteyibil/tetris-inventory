@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "name": "ItemInputs",
+    "maps": [
+        {
+            "name": "Item",
+            "id": "5c58b06d-b3b5-49bb-aaf7-c9f654063906",
+            "actions": [
+                {
+                    "name": "Press",
+                    "type": "Button",
+                    "id": "869c75ed-a3dc-441a-aec3-331284f0d66d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "f52f6554-a5ae-4614-88d1-0f051b7f967e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Button",
+                    "id": "08851dad-71b6-4046-b7a1-d2c7510ef53e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4709ff1d-8b9a-484c-89a7-e9b327770c9e",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "16876dc4-e794-476f-9cfc-e6cc0cbac41a",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12470940-7eab-450a-a030-119c7195cad8",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

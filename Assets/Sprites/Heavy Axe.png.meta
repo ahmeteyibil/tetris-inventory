@@ -142,12 +142,12 @@ TextureImporter:
       name: Heavy Axe_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 70
         y: 70
-        width: 1222
-        height: 628
+        width: 1149
+        height: 331
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -164,7 +164,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f60b9893290722e49b0ce8816e80df7c
     internalID: 0
     vertices: []
     indices: 
