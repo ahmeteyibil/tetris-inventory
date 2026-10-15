@@ -8,7 +8,10 @@ public class TileHighlighterPool : MonoBehaviour
 {
     [SerializeField] Color emptyHighlightColor, fullHighlightColor, mergeHighlightColor;
     [SerializeField] GameObject tileHighlighterPrefab;
-
+    // <summary>
+    // Highlighter objesinin normal tile objesinden width ve height olarak ne kadar küçük olacaðýný belirtir
+    // </summary>
+    [SerializeField] float highlighterSizeOffset = 15f;
     List<HighlighterComponent> pool = new List<HighlighterComponent>();
     //List<RectTransform> highlighterPool;
     int activeCount = 0;
@@ -20,12 +23,11 @@ public class TileHighlighterPool : MonoBehaviour
         {
             var newObj = Instantiate(tileHighlighterPrefab, this.transform);
             newObj.SetActive(false);
-            pool.Add(new HighlighterComponent
-            {
-                gameObject = newObj,
-                rectTransform = newObj.GetComponent<RectTransform>(),
-                image = newObj.GetComponent<Image>()
-            });
+            pool.Add(new HighlighterComponent(
+                newObj,
+                newObj.GetComponent<RectTransform>(),
+                newObj.GetComponent<Image>(),
+                highlighterSizeOffset));
         }
         for (int i = 0; i < n; i++)
         {

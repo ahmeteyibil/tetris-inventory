@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     [SerializeField] float itemDragYOffset = .2f;
     [SerializeField] TileHighlighterPool tileHighlighterPool;
+    [SerializeField] float dragThreshold = 10f;
     public ItemGrid selectedGrid { get; private set; }
     public InventoryItem SelectedItem { get; set; }
     InventoryItem overlapItem;
@@ -23,6 +24,8 @@ public class InventoryManager : MonoBehaviour
     InputAction rotateAction;
     Vector2Int itemBeforeDragCoord;
     Vector2Int lastHoveredCoord = new Vector2Int(-999, -999);
+    Vector2 pointerDownPos;
+    bool isPointerDown = false, isDragging = false;
     List<Vector2Int> draggingItemHoverCoords;
     private void Awake()
     {
@@ -41,7 +44,7 @@ public class InventoryManager : MonoBehaviour
 
     private void RotateSelectedItem90Deg(InputAction.CallbackContext context)
     {
-        if (SelectedItem == null) return;
+        if (SelectedItem == null || !isDragging) return;
         SelectedItem.Rotate90Deg();
     }
     private void OnEnable()
@@ -59,39 +62,76 @@ public class InventoryManager : MonoBehaviour
     }
     private void Update()
     {
+        CheckForDrag();
         DragSelectedItem();
     }
     public void SetSelectedGrid(ItemGrid itemGrid)
     {
         selectedGrid = itemGrid;
     }
+    
     void OnDragStart(InputAction.CallbackContext context)
     {
-        if (SelectedItem != null || selectedGrid == null) return;
-
         if(SelectedItem != null)
         {
             TryDropItem();
             return;
         }
 
-        Debug.Log("Item sürüklenmesi baþlýyor");
-        Vector2 mousePos = positionAction.ReadValue<Vector2>();
-        Vector2Int coord = selectedGrid.GetCoordinateFromScreenPoint(mousePos);
+        pointerDownPos = positionAction.ReadValue<Vector2>();
 
-        InventoryItem itemReturned = selectedGrid.PickupItem(coord);
-        if (itemReturned != null)
+        isPointerDown = true;
+        isDragging = false;
+
+    }
+    void CheckForDrag()
+    {
+        if (isPointerDown && !isDragging && SelectedItem == null && selectedGrid != null)
         {
-            SelectedItem = itemReturned;
-            selectedItemRect = SelectedItem.GetComponent<RectTransform>();
-            selectedItemRect.SetAsLastSibling(); // Ekranda en önde gözükmesini saðlar.
-            itemBeforeDragCoord = SelectedItem.GridStartCoord;
+            Vector2 currentMousePos = positionAction.ReadValue<Vector2>();
+            if(Vector2.Distance(currentMousePos, pointerDownPos) > dragThreshold) // Drag için gerekli 
+            {
+                isDragging = true;
+
+                Vector2 mousePos = positionAction.ReadValue<Vector2>();
+                Vector2Int coord = selectedGrid.GetCoordinateFromScreenPoint(mousePos);
+
+                InventoryItem itemReturned = selectedGrid.PickupItem(coord);
+                if (itemReturned != null)
+                {
+                    Debug.Log("Item sürüklenmesi baþlýyor");
+                    SelectedItem = itemReturned;
+                    selectedItemRect = SelectedItem.GetComponent<RectTransform>();
+                    selectedItemRect.SetAsLastSibling(); // Ekranda en önde gözükmesini saðlar.
+                    itemBeforeDragCoord = SelectedItem.GridStartCoord;
+                }
+            }
         }
     }
     void OnDragEnd(InputAction.CallbackContext context)
     {
-        if (SelectedItem == null || selectedGrid == null) return;
-        TryDropItem();
+        isPointerDown = false;
+        if (isDragging)
+        {
+            if (SelectedItem == null || selectedGrid == null) return;
+            TryDropItem();
+            isDragging = false;
+        }
+        else
+        {
+            if (selectedGrid != null && SelectedItem == null)
+            {
+                Vector2Int coord = selectedGrid.GetCoordinateFromScreenPoint(pointerDownPos);
+                InventoryItem clickedItem = selectedGrid.GetItemAt(coord);
+
+                if (clickedItem != null)
+                {
+                    // TODO: Tooltip panelini ac
+                    Debug.Log($"Tooltip açýlýyor. Item: {clickedItem.Data.itemID}");
+                }
+            }
+        }
+        
     }
     void TryDropItem()
     {
@@ -107,10 +147,10 @@ public class InventoryManager : MonoBehaviour
 
 
         tileHighlighterPool.DeactiveAll();
-
-        if(SelectedItem == null) // Merge gerçekleþmiþ.
+        if (SelectedItem == null) // Merge gerçekleþmiþ.
         {
             lastHoveredCoord = new Vector2Int(-999, -999);
+
         }
         else if (draggingItem != SelectedItem) // Overlap swap gerçekleþmiþ ise
         {
@@ -118,7 +158,7 @@ public class InventoryManager : MonoBehaviour
             selectedItemRect.SetAsLastSibling(); // UI'da en öne alýr.
 
         }
-        else if(draggingItem == SelectedItem)
+        else if(draggingItem == SelectedItem) // Item boþ bir koordinata yerleþtirilmiþ ise.
         {
             lastHoveredCoord = new Vector2Int(-999, -999);
             selectedItemRect.SetAsFirstSibling(); // Diðer itemlerin arkasýna atar.

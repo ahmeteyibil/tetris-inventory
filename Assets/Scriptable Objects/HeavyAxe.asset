@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: HeavyAxe
   m_EditorClassIdentifier: 
   itemID: item_HeavyAxe
+  itemName: Heavy Axe
+  itemLevel: 1
   shapeCoords:
   - {x: 0, y: 0}
   - {x: 1, y: 0}

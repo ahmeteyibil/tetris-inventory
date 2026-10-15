@@ -434,7 +434,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emptyHighlightColor: {r: 1, g: 1, b: 1, a: 0.39215687}
   fullHighlightColor: {r: 1, g: 0, b: 0, a: 0.39215687}
+  mergeHighlightColor: {r: 0.09686136, g: 0, b: 1, a: 0.40392157}
   tileHighlighterPrefab: {fileID: 5572845684581724751, guid: b8e46cda7df71c84592274bcb01d6149, type: 3}
+  highlighterSizeOffset: 15
 --- !u!1 &1557200821
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +467,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 753466706}
+  - {fileID: 1897793875}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1578532492
@@ -800,13 +803,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88501be7d24ed4649be5cb3b20ae4d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 10
-  gridHeight: 10
+  gridWidth: 6
+  gridHeight: 6
   parentCanvas: {fileID: 571472130}
-  itemPrefab: {fileID: 3052231717232425742, guid: 6eff15cb01509a6439d53b4f02534f66, type: 3}
-  itemDatas:
-  - {fileID: 11400000, guid: f02af1a747d73974990bdbaeb57202d2, type: 2}
-  - {fileID: 11400000, guid: e9d92cc9117bb4049a8a1de8ab598e47, type: 2}
 --- !u!114 &1814692823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,6 +902,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc65582f955455d4da75425986c3ad73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1897793874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897793875}
+  - component: {fileID: 1897793876}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1897793875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897793874}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1557200822}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1897793876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897793874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28f75c9fc8e734844bc367ce530e29cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 3052231717232425742, guid: 6eff15cb01509a6439d53b4f02534f66, type: 3}
+  itemDatas:
+  - {fileID: 11400000, guid: e87df8103a7341d458afb1d01b15888f, type: 2}
+  - {fileID: 11400000, guid: f9d9b69cf0bca634ab7f70a6ac217ab0, type: 2}
+  - {fileID: 11400000, guid: f02af1a747d73974990bdbaeb57202d2, type: 2}
+  - {fileID: 11400000, guid: e9d92cc9117bb4049a8a1de8ab598e47, type: 2}
+  - {fileID: 11400000, guid: 37388940a4f0645448971bbadaa464c0, type: 2}
+  - {fileID: 11400000, guid: 2cd83c0bda014d3408aa1686927bf039, type: 2}
+  gridCanvas: {fileID: 571472130}
 --- !u!1 &2142600919
 GameObject:
   m_ObjectHideFlags: 0

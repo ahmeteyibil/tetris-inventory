@@ -5,7 +5,7 @@ using static UnityEditor.Progress;
 
 public class ItemGrid : MonoBehaviour
 {
-    const int ppuForTile = 50;
+    const int ppuForTile = 25;
     public const float tileWidth = 32 * 100 / (ppuForTile);
     public const float tileHeight = 32 * 100 / (ppuForTile);
     [SerializeField] int gridWidth = 3;
@@ -28,8 +28,6 @@ public class ItemGrid : MonoBehaviour
         inventoryItemSlots = new InventoryItem[gridWidth, gridHeight];
         rectTransform.sizeDelta = new Vector2(gridWidth * tileWidth, gridHeight * tileHeight);
 
-        CreateAndPlaceItemOnRandomCoord("item_Diamond");
-        CreateAndPlaceItemOnRandomCoord("item_Diamond");
         CreateAndPlaceItemOnRandomCoord("item_BigSword");
         CreateAndPlaceItemOnRandomCoord("item_BigSword");
         //CreateAndPlaceItemOnRandomCoord("item_HealthPotion");
@@ -63,13 +61,7 @@ public class ItemGrid : MonoBehaviour
         InventoryItem item = inventoryItemSlots[coord.x, coord.y];
         if (item == null) return null;
         Vector2Int startCoord = item.GridStartCoord;
-        //for (int i = 0; i < item.Data.width; i++)
-        //{
-        //    for (int j = 0; j < item.Data.height; j++)
-        //    {
-        //        inventoryItemSlots[startCoord.x + i, startCoord.y + j] = null;
-        //    }
-        //}
+
         foreach (var shapeCoord in item.Data.shapeCoords)
         {
             inventoryItemSlots[startCoord.x + shapeCoord.x, startCoord.y + shapeCoord.y] = null;
@@ -180,6 +172,11 @@ public class ItemGrid : MonoBehaviour
             if (!IsCoordWithinBounds(coord)) return false;
         }
         return true;
+    }
+    public InventoryItem GetItemAt(Vector2Int coord)
+    {
+        if (!IsCoordWithinBounds(coord)) return null;
+        return inventoryItemSlots[coord.x, coord.y];
     }
     public Vector2Int GetCoordinateFromScreenPoint(Vector2 screenPoint)
     {

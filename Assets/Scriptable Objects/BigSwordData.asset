@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BigSwordData
   m_EditorClassIdentifier: 
   itemID: item_BigSword
+  itemName: Big Sword
+  itemLevel: 1
   shapeCoords:
   - {x: 0, y: 0}
   - {x: 0, y: 1}

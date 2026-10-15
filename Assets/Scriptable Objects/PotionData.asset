@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7017a5dae172d4aa1cfef57687b11e, type: 3}
   m_Name: PotionData
   m_EditorClassIdentifier: 
-  itemID: item_potion
+  itemID: item_HealthPotion
+  itemName: Health Potion
+  itemLevel: 1
   shapeCoords:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
