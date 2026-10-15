@@ -44,8 +44,9 @@ public class InventoryManager : MonoBehaviour
 
     private void RotateSelectedItem90Deg(InputAction.CallbackContext context)
     {
-        if (SelectedItem == null || !isDragging) return;
+        if (SelectedItem == null) return;
         SelectedItem.Rotate90Deg();
+        draggingItemHoverCoords = selectedGrid.GetItemHoverCoordinates(SelectedItem);
     }
     private void OnEnable()
     {
@@ -59,6 +60,7 @@ public class InventoryManager : MonoBehaviour
     {
         pressAction.started -= OnDragStart;
         pressAction.canceled -= OnDragEnd;
+        rotateAction.performed -= RotateSelectedItem90Deg;
     }
     private void Update()
     {
@@ -142,6 +144,7 @@ public class InventoryManager : MonoBehaviour
         bool placementSuccess = TryPlaceOrMerge(SelectedItem, topLeftCoord);
         if (!placementSuccess)
         {
+            Debug.Log("Placement gerçekleþemediði için eski koordinatlara geri place ediliyor.");
             TryPlaceOrMerge(SelectedItem, itemBeforeDragCoord);
         }
 
@@ -180,8 +183,8 @@ public class InventoryManager : MonoBehaviour
             out Vector2 itemTopLeft
         );
 
-        float x = itemTopLeft.x - SelectedItem.Data.width * ItemGrid.tileWidth / 2;
-        float y = itemTopLeft.y + SelectedItem.Data.height * ItemGrid.tileWidth / 2 + itemDragYOffset;
+        float x = itemTopLeft.x - SelectedItem.CurrentWidth * ItemGrid.tileWidth / 2;
+        float y = itemTopLeft.y + SelectedItem.CurrentHeight * ItemGrid.tileWidth / 2 + itemDragYOffset;
 
         selectedItemRect.localPosition = new Vector2(x, y);
         Vector2Int currentTopLeftCoord = selectedGrid.GetItemTopLeftCoord(selectedItemRect);
@@ -203,6 +206,7 @@ public class InventoryManager : MonoBehaviour
             SelectedItem = overlapItem;
             selectedItemRect = overlapItem.GetComponent<RectTransform>();
             itemBeforeDragCoord = overlapItem.GridStartCoord;
+            //isDragging = true;
             overlapItem = null;
         }
         return success;

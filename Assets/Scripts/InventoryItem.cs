@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ public class InventoryItem : MonoBehaviour
     RectTransform rectTransform;
     public Vector2Int GridStartCoord { get; set; }
     public ItemData Data => itemData;
+    public int CurrentWidth { get; private set; }
+    public int CurrentHeight { get; private set; }
+    public List<Vector2Int> CurrentShapeCoords { get; private set; }
     int currentZDegree = 0;
     private void OnDestroy()
     {
@@ -17,38 +21,41 @@ public class InventoryItem : MonoBehaviour
     public void Setup(ItemData data)
     {
         itemData = Instantiate(data);
+        CurrentShapeCoords = new List<Vector2Int>(itemData.shapeCoords);
+        CurrentWidth = itemData.defaultWidth;
+        CurrentHeight = itemData.defaultHeight;
         itemImage.sprite = itemData.itemIcon;
         rectTransform = GetComponent<RectTransform>();
-        Vector2 sizeVec = new Vector2(ItemGrid.tileWidth * data.width, ItemGrid.tileHeight * data.height);
+        Vector2 sizeVec = new Vector2(ItemGrid.tileWidth * CurrentWidth, ItemGrid.tileHeight * CurrentHeight);
         rectTransform.sizeDelta = sizeVec;
         visualRect.sizeDelta = sizeVec;
         gameObject.name = $"Item ({itemData.itemName})";
     }
     public void Rotate90Deg()
     {
-        int oldHeight = itemData.height;
-        int oldWidth = itemData.width;
+        int oldHeight = CurrentHeight;
+        int oldWidth = CurrentWidth;
 
         int newWidth = oldHeight;
         int newHeight = oldWidth;
 
-        itemData.width = newWidth;
-        itemData.height = newHeight;
+        CurrentWidth = newWidth;
+        CurrentHeight = newHeight;
 
-        rectTransform.sizeDelta = new Vector2(ItemGrid.tileWidth * itemData.width, ItemGrid.tileHeight * itemData.height);
+        rectTransform.sizeDelta = new Vector2(ItemGrid.tileWidth * CurrentWidth, ItemGrid.tileHeight * CurrentHeight);
 
         Vector2Int currentCoord;
         // ShapeCoords'larý güncelle.
-        for (int i = 0; i < itemData.shapeCoords.Count; i++)
+        for (int i = 0; i < CurrentShapeCoords.Count; i++)
         {
-            currentCoord = itemData.shapeCoords[i];
+            currentCoord = CurrentShapeCoords[i];
             int oldX = currentCoord.x;
             int oldY = currentCoord.y;
 
             currentCoord.x = oldHeight - 1 - oldY;
             currentCoord.y = oldX;
 
-            itemData.shapeCoords[i] = currentCoord;
+            CurrentShapeCoords[i] = currentCoord;
         }
 
         currentZDegree -= 90;
@@ -63,7 +70,13 @@ public class InventoryItem : MonoBehaviour
             Debug.LogWarning("Item'in bir üst seviyesi bulunamadýðý için upgrade edilemedi");
             return false; 
         }
-        Setup(upgradedItemData);
+        if(itemData != null)
+        {
+            Destroy(itemData);
+        }
+        itemData = Instantiate(upgradedItemData);
+        itemImage.sprite = itemData.itemIcon;
+        CurrentShapeCoords = new List<Vector2Int>(itemData.shapeCoords);
         Debug.Log("Item baþarýlý bir þekilde seviye atladý.");
         return true;
     }

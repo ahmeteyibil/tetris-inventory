@@ -18,6 +18,6 @@ MonoBehaviour:
   shapeCoords:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
-  width: 1
-  height: 2
+  defaultWidth: 1
+  defaultHeight: 2
   itemIcon: {fileID: -2880734798192188640, guid: 316af95366c0c70458d62cbb9faa2fb3, type: 3}

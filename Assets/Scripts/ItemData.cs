@@ -8,7 +8,7 @@ public class ItemData : ScriptableObject
     public string itemName;
     public int itemLevel = 1;
     public List<Vector2Int> shapeCoords;
-    public int width = 1;
-    public int height = 1;
+    public int defaultWidth = 1;
+    public int defaultHeight = 1;
     public Sprite itemIcon;
 }

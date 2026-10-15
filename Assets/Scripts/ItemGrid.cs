@@ -28,8 +28,8 @@ public class ItemGrid : MonoBehaviour
         inventoryItemSlots = new InventoryItem[gridWidth, gridHeight];
         rectTransform.sizeDelta = new Vector2(gridWidth * tileWidth, gridHeight * tileHeight);
 
-        CreateAndPlaceItemOnRandomCoord("item_BigSword");
-        CreateAndPlaceItemOnRandomCoord("item_BigSword");
+        CreateAndPlaceItemOnRandomCoord("item_HeavyAxe");
+        CreateAndPlaceItemOnRandomCoord("item_HeavyAxe");
         //CreateAndPlaceItemOnRandomCoord("item_HealthPotion");
     }
     void CreateAndPlaceItemOnRandomCoord(string itemID)
@@ -37,14 +37,14 @@ public class ItemGrid : MonoBehaviour
         InventoryItem dummyOverlap = null;
         InventoryItem createdItem = ItemManager.Instance.CreateItem(itemID, this);
         if (createdItem == null) return;
-        Vector2Int randomCoord = new Vector2Int(Random.Range(0, GridWidth - createdItem.Data.width + 1), Random.Range(0, GridHeight - createdItem.Data.height + 1));
+        Vector2Int randomCoord = new Vector2Int(Random.Range(0, GridWidth - createdItem.CurrentWidth + 1), Random.Range(0, GridHeight - createdItem.CurrentHeight + 1));
         int maxAttemp = 50;
         int i;
         for (i = 0; i < maxAttemp; i++)
         {
             randomCoord = new Vector2Int(
-                Random.Range(0, GridWidth - createdItem.Data.width + 1),
-                Random.Range(0, GridHeight - createdItem.Data.height + 1));
+                Random.Range(0, GridWidth - createdItem.CurrentWidth + 1),
+                Random.Range(0, GridHeight - createdItem.CurrentHeight + 1));
             if (TryPlaceOrMerge(createdItem, randomCoord, ref dummyOverlap))
             {
                 break;
@@ -62,7 +62,19 @@ public class ItemGrid : MonoBehaviour
         if (item == null) return null;
         Vector2Int startCoord = item.GridStartCoord;
 
-        foreach (var shapeCoord in item.Data.shapeCoords)
+        foreach (var shapeCoord in item.CurrentShapeCoords)
+        {
+            inventoryItemSlots[startCoord.x + shapeCoord.x, startCoord.y + shapeCoord.y] = null;
+        }
+        Debug.Log($"{item.gameObject.name} isimli item grid'den pickup edildi");
+        return item;
+    }
+    public InventoryItem PickupItem(InventoryItem item)
+    {
+        if (item == null) return null;
+        Vector2Int startCoord = item.GridStartCoord;
+
+        foreach (var shapeCoord in item.CurrentShapeCoords)
         {
             inventoryItemSlots[startCoord.x + shapeCoord.x, startCoord.y + shapeCoord.y] = null;
         }
@@ -102,10 +114,10 @@ public class ItemGrid : MonoBehaviour
         // Eðer overlapItem varsa matristen sil.
         if (overlapItem != null)
         {
-            PickupItem(overlapItem.GridStartCoord);
+            PickupItem(overlapItem);
         }
 
-        foreach (var shapeCoord in item.Data.shapeCoords)
+        foreach (var shapeCoord in item.CurrentShapeCoords)
         {
             inventoryItemSlots[topLeftCoord.x + shapeCoord.x, topLeftCoord.y + shapeCoord.y] = item;
         }
@@ -117,13 +129,13 @@ public class ItemGrid : MonoBehaviour
         localPos.x = topLeftCoord.x * tileWidth;
         localPos.y = -topLeftCoord.y * tileHeight;
         item.GetComponent<RectTransform>().localPosition = localPos;
-        Debug.Log($"{item.gameObject.name} isimli item grid'de {topLeftCoord} noktasýna place edildi");
+        Debug.Log($"Placement for {item.gameObject.name}: {topLeftCoord}");
         return true;
     }
     bool OverlapControl(InventoryItem item, Vector2Int startCoord, ref InventoryItem overlapItem)
     {
         overlapItem = null;
-        foreach (var shapeCoord in item.Data.shapeCoords)
+        foreach (var shapeCoord in item.CurrentShapeCoords)
         {
             InventoryItem itemAtCoord = inventoryItemSlots[startCoord.x + shapeCoord.x, startCoord.y + shapeCoord.y];
             if (itemAtCoord != null && overlapItem == null)
@@ -140,23 +152,37 @@ public class ItemGrid : MonoBehaviour
     }
     InventoryItem GetMergeItem(InventoryItem item, Vector2Int startCoord)
     {
-        InventoryItem mergeItem = null;
+        InventoryItem targetMergeItem = null;
         InventoryItem itemAtCoord = null;
-        int matchCoordCount = 0;
-        foreach (var shapeCoord in item.Data.shapeCoords)
+
+        string shapeCoordsInStr = "";
+        foreach(var coord in item.CurrentShapeCoords)
+        {
+            shapeCoordsInStr += $"{coord},";
+        }
+
+        Debug.Log($"Merge kontrolü yapýlacak draggingItem'in shape koordinatlarý: [{shapeCoordsInStr}]");
+
+
+        foreach (var shapeCoord in item.CurrentShapeCoords)
         {
             itemAtCoord = inventoryItemSlots[startCoord.x + shapeCoord.x, startCoord.y + shapeCoord.y];
             if (itemAtCoord == null) { return null; }
-            if (itemAtCoord.Data.itemID == item.Data.itemID && itemAtCoord.Data.itemLevel == item.Data.itemLevel)
+            if (targetMergeItem == null)
             {
-                matchCoordCount++;
+                targetMergeItem = itemAtCoord;
             }
+            else if(targetMergeItem != itemAtCoord)
+            {
+                return null;
+            }
+            
         }
-        if (matchCoordCount == item.Data.shapeCoords.Count)
+        if (itemAtCoord.Data.itemID == item.Data.itemID && itemAtCoord.Data.itemLevel == item.Data.itemLevel)
         {
-            mergeItem = itemAtCoord;
+            return targetMergeItem;
         }
-        return mergeItem;
+        return null;
     }
     bool IsCoordWithinBounds(Vector2Int coord)
     {
@@ -166,7 +192,7 @@ public class ItemGrid : MonoBehaviour
     {
         if (!IsCoordWithinBounds(startCoord)) return false;
         Vector2Int coord;
-        foreach (var shapeCoord in item.Data.shapeCoords)
+        foreach (var shapeCoord in item.CurrentShapeCoords)
         {
             coord = startCoord + shapeCoord;
             if (!IsCoordWithinBounds(coord)) return false;
@@ -196,7 +222,7 @@ public class ItemGrid : MonoBehaviour
         hoverCoordsCache.Clear();
         Vector2Int itemTopLeftCoord = GetItemTopLeftCoord(item.transform);
         Vector2Int slotCoord;
-        foreach (var coord in item.Data.shapeCoords)
+        foreach (var coord in item.CurrentShapeCoords)
         {
             slotCoord = new Vector2Int(itemTopLeftCoord.x + coord.x, itemTopLeftCoord.y + coord.y);
             if (IsCoordWithinBounds(slotCoord))

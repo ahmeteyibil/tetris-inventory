@@ -20,6 +20,6 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 2, y: 1}
-  width: 3
-  height: 2
+  defaultWidth: 3
+  defaultHeight: 2
   itemIcon: {fileID: 3985826630898905788, guid: 030216386a1f41b4490f8009f3e74985, type: 3}

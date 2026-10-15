@@ -268,6 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDragYOffset: 0.2
   tileHighlighterPool: {fileID: 1271422033}
+  dragThreshold: 10
 --- !u!1 &847169127
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,6 +954,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f02af1a747d73974990bdbaeb57202d2, type: 2}
   - {fileID: 11400000, guid: e9d92cc9117bb4049a8a1de8ab598e47, type: 2}
   - {fileID: 11400000, guid: 37388940a4f0645448971bbadaa464c0, type: 2}
+  - {fileID: 11400000, guid: b170e85fe9b36de42b2bff8a4a463086, type: 2}
   - {fileID: 11400000, guid: 2cd83c0bda014d3408aa1686927bf039, type: 2}
   gridCanvas: {fileID: 571472130}
 --- !u!1 &2142600919
