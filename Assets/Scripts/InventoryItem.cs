@@ -76,7 +76,7 @@ public class InventoryItem : MonoBehaviour
         }
         itemData = Instantiate(upgradedItemData);
         itemImage.sprite = itemData.itemIcon;
-        CurrentShapeCoords = new List<Vector2Int>(itemData.shapeCoords);
+        //CurrentShapeCoords = new List<Vector2Int>(itemData.shapeCoords);
         Debug.Log("Item baþarýlý bir þekilde seviye atladý.");
         return true;
     }
